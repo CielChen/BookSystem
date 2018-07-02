@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ciel.appoint.dao.BookDao">
+	<select id="queryById" parameterType="long" resultType="com.ciel.appoint.entity.Book" >
+		SELECT
+			book_id,
+			name,
+			introd,
+			number
+		FROM
+			book
+		WHERE
+			book_id = #{bookId}
+	</select>
+
+	<select id="querySome" parameterType="com.ciel.appoint.entity.Book" resultType="com.ciel.appoint.entity.Book">
+		SELECT book_id,name,introd,number FROM book
+		<where>
+			<!-- <if test="name !=null and !&quot;&quot;.equals(name.trim())">  -->
+				and name like '%' #{name} '%'
+			<!--  </if>   -->
+		</where> 
+	</select> 
+		
+	<select id="queryAll" resultType="com.ciel.appoint.entity.Book">
+		SELECT
+			book_id,
+			name,
+			introd,
+			number
+		FROM
+			book
+		ORDER BY
+			book_id
+		LIMIT #{startNumber}, #{recordNum}
+	</select>
+	
+	<update id="reduceNumber">
+		UPDATE book
+		SET number = number - 1
+		WHERE
+			book_id = #{bookId}
+		AND number > 0
+	</update>
+	
+	<insert id="addBook" parameterType="com.ciel.appoint.entity.Book">
+		INSERT INTO
+			book(book_id, name, introd, number)
+		VALUES (#{0}, #{1}, #{2}, #{3})
+	</insert>
+	
+	<delete id="deleteBook" parameterType="com.ciel.appoint.entity.Book">
+		delete from book
+		where book_id = #{bookId}
+	</delete>
+	
+	<update id="updateBook" parameterType="com.ciel.appoint.entity.Book">
+		update book
+		set name = #{name}, introd = #{introd}, number = #{number}
+		where book_id = #{bookId}
+	</update>
+</mapper>
